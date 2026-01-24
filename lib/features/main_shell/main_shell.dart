@@ -3,5 +3,5 @@ library;
 
 export 'data/models/navigation_item.dart';
 export 'data/navigation_config.dart';
-export 'main_shell_provider.dart';
+export 'presentation/bloc/main_shell_cubit.dart';
 export 'main_shell_screen.dart';

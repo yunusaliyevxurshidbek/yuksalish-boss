@@ -13,7 +13,9 @@
       "Bash(echo:*)",
       "Bash(git -C \"d:/Studio Projects/yuksalish-boss\" diff --name-status HEAD)",
       "Bash(dart analyze:*)",
-      "Bash(flutter pub add:*)"
+      "Bash(flutter pub add:*)",
+      "Bash(del \"d:\\\\Studio Projects\\\\yuksalish-boss\\\\lib\\\\features\\\\main_shell\\\\presentation\\\\bloc\\\\main_shell_state.dart\")",
+      "Bash(del \"d:\\\\Studio Projects\\\\yuksalish-boss\\\\lib\\\\features\\\\main_shell\\\\main_shell_provider.dart\")"
     ]
   }
 }

@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
@@ -17,7 +16,7 @@ import '../notifications/notifications.dart';
 ///
 /// Uses a Stack-based layout where the page content extends behind
 /// the floating navigation bar for an immersive VisionOS-inspired design.
-class MainShellScreen extends ConsumerWidget {
+class MainShellScreen extends StatelessWidget {
   /// Child widget from router (current tab content)
   final Widget child;
 
@@ -27,7 +26,7 @@ class MainShellScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final currentIndex = _calculateSelectedIndex(context);
 
     // Use BlocProvider.value for singleton Cubit to prevent closing on dispose

@@ -83,6 +83,9 @@ import 'features/notifications/data/datasources/notifications_remote_datasource.
 import 'features/notifications/data/repositories/notifications_repository.dart';
 import 'features/notifications/presentation/bloc/notifications_cubit.dart';
 
+// Main Shell Feature
+import 'features/main_shell/presentation/bloc/main_shell_cubit.dart';
+
 // Profile Feature
 import 'features/profile/data/datasources/profile_edit_remote_datasource.dart';
 import 'features/profile/data/datasources/profile_remote_datasource.dart';
@@ -505,6 +508,13 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<NotificationsCubit>(
     () => NotificationsCubit(repository: getIt<NotificationsRepository>()),
+  );
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MAIN SHELL FEATURE
+  // ═══════════════════════════════════════════════════════════════════════════
+  getIt.registerLazySingleton<MainShellCubit>(
+    () => MainShellCubit(),
   );
 
   // ═══════════════════════════════════════════════════════════════════════════

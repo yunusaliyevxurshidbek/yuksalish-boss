@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "83837184567",
-    "project_id": "yuksalish-boss",
-    "storage_bucket": "yuksalish-boss.firebasestorage.app"
+    "project_number": "253610407518",
+    "project_id": "yuksalish-boss-notification",
+    "storage_bucket": "yuksalish-boss-notification.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:83837184567:android:38eef259633ae4a380edb2",
+        "mobilesdk_app_id": "1:253610407518:android:92ec8f015b27e77c0ee6cf",
         "android_client_info": {
           "package_name": "com.yuksalish.boss"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDjrzmvJgEEp6ZtN9Zf212NqzP4gc5SeYg"
+          "current_key": "AIzaSyCAtsjRTtKeVgRYIyFyihetvC8zKp4NHus"
         }
       ],
       "services": {

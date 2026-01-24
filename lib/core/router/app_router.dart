@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
@@ -333,5 +332,3 @@ final router = GoRouter(
     ),
   ],
 );
-
-final appRouterProvider = Provider<GoRouter>((ref) => router);
