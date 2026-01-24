@@ -6,6 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/services/my_shared_preferences.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../domain/entities/device_info.dart';
 
 /// Service for gathering device information and managing persistent device ID.
@@ -24,12 +25,14 @@ class DeviceInfoService {
   /// 1. Retrieves or generates a persistent device UUID
   /// 2. Gathers platform-specific hardware information
   /// 3. Gets the current app version
+  /// 4. Gets FCM push token (if available)
   Future<DeviceInfo> getDeviceInfo() async {
     final deviceId = await getOrCreateDeviceId();
     final platform = _getPlatform();
     final deviceModel = await _getDeviceModel();
     final osVersion = await _getOsVersion();
     final appVersion = await _getAppVersion();
+    final pushToken = await _getPushToken();
 
     return DeviceInfo(
       deviceId: deviceId,
@@ -37,7 +40,18 @@ class DeviceInfoService {
       deviceModel: deviceModel,
       osVersion: osVersion,
       appVersion: appVersion,
+      pushToken: pushToken,
     );
+  }
+
+  /// Gets the FCM push notification token.
+  Future<String?> _getPushToken() async {
+    try {
+      return await NotificationService.instance.getToken();
+    } catch (e) {
+      log('[DeviceInfoService] Error getting push token: $e');
+      return null;
+    }
   }
 
   /// Gets the persistent device ID, generating one if it doesn't exist.

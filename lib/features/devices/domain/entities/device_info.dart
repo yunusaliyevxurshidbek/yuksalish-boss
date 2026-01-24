@@ -17,13 +17,29 @@ class DeviceInfo extends Equatable {
   /// Application version.
   final String appVersion;
 
+  /// FCM push notification token.
+  final String? pushToken;
+
   const DeviceInfo({
     required this.deviceId,
     required this.platform,
     required this.deviceModel,
     required this.osVersion,
     required this.appVersion,
+    this.pushToken,
   });
+
+  /// Creates a copy with an updated push token.
+  DeviceInfo copyWithPushToken(String? pushToken) {
+    return DeviceInfo(
+      deviceId: deviceId,
+      platform: platform,
+      deviceModel: deviceModel,
+      osVersion: osVersion,
+      appVersion: appVersion,
+      pushToken: pushToken,
+    );
+  }
 
   @override
   List<Object?> get props => [
@@ -32,5 +48,6 @@ class DeviceInfo extends Equatable {
         deviceModel,
         osVersion,
         appVersion,
+        pushToken,
       ];
 }

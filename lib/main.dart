@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,7 @@ import 'core/localization/bloc/language_bloc.dart';
 import 'core/localization/language_prefs.dart';
 import 'core/router/app_router.dart';
 import 'core/services/my_shared_preferences.dart';
+import 'core/services/notification_service.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_cubit.dart';
 import 'features/app_lock/presentation/bloc/app_lock/app_lock_bloc.dart';
@@ -18,6 +20,9 @@ import 'presentation/managers/app_lock_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   await EasyLocalization.ensureInitialized();
   await initializeDateFormatting('uz', null);
   await MySharedPreferences.init();
@@ -29,6 +34,10 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
+
+  // Initialize push notifications
+  await NotificationService.instance.init();
+
   final languagePrefs = di.getIt<LanguagePrefs>();
   final startLocale = localeFromCode(languagePrefs.getSavedLocaleCode());
 

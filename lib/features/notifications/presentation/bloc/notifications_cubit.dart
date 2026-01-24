@@ -16,9 +16,11 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
   /// Load all notifications
   Future<void> loadNotifications() async {
+    if (isClosed) return;
     emit(state.copyWith(status: NotificationsStatus.loading));
     try {
       final notifications = await _repository.getNotifications();
+      if (isClosed) return;
       final unreadCount = notifications.where((n) => !n.isRead).length;
       final grouped = _groupByDate(notifications);
       emit(state.copyWith(
@@ -28,6 +30,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         unreadCount: unreadCount,
       ));
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(
         status: NotificationsStatus.error,
         errorMessage: e.toString(),
@@ -39,6 +42,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   Future<void> refresh() async {
     try {
       final notifications = await _repository.getNotifications();
+      if (isClosed) return;
       final unreadCount = notifications.where((n) => !n.isRead).length;
       final grouped = _groupByDate(notifications);
       emit(state.copyWith(
@@ -47,6 +51,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         unreadCount: unreadCount,
       ));
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(errorMessage: e.toString()));
     }
   }
@@ -55,6 +60,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   Future<void> markAsRead(int id) async {
     try {
       final updated = await _repository.markAsRead(id);
+      if (isClosed) return;
       final notifications = state.notifications.map((n) {
         return n.id == id ? updated : n;
       }).toList();
@@ -66,6 +72,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         unreadCount: unreadCount,
       ));
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(errorMessage: e.toString()));
     }
   }
@@ -74,6 +81,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   Future<void> markAllAsRead() async {
     try {
       await _repository.markAllAsRead();
+      if (isClosed) return;
       final notifications =
           state.notifications.map((n) => n.copyWith(isRead: true)).toList();
       final grouped = _groupByDate(notifications);
@@ -83,6 +91,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         unreadCount: 0,
       ));
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(errorMessage: e.toString()));
     }
   }
@@ -91,6 +100,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   Future<void> delete(int id) async {
     try {
       await _repository.delete(id);
+      if (isClosed) return;
       final notifications =
           state.notifications.where((n) => n.id != id).toList();
       final unreadCount = notifications.where((n) => !n.isRead).length;
@@ -101,6 +111,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         unreadCount: unreadCount,
       ));
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(errorMessage: e.toString()));
     }
   }
@@ -109,12 +120,14 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   Future<void> clearAll() async {
     try {
       await _repository.clearAll();
+      if (isClosed) return;
       emit(state.copyWith(
         notifications: [],
         groupedNotifications: {},
         unreadCount: 0,
       ));
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(errorMessage: e.toString()));
     }
   }

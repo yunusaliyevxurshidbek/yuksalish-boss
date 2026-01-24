@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:yuksalish_mobile/core/error/exceptions.dart';
 import 'package:yuksalish_mobile/core/error/failures.dart';
+import 'package:yuksalish_mobile/features/devices/domain/entities/device_info.dart';
 import '../../domain/entities/login_response.dart';
 import '../../domain/repositories/login_repository.dart';
 import '../datasources/remote/login_remote_datasource.dart';
@@ -16,11 +17,13 @@ class LoginRepositoryImpl implements LoginRepository {
   Future<Either<Failure, LoginResponseEntity>> login({
     required String phone,
     required String password,
+    required DeviceInfo deviceInfo,
   }) async {
     try {
       final response = await remoteDataSource.login(
         phone: phone,
         password: password,
+        deviceInfo: deviceInfo,
       );
       return Right(response.toEntity());
     } on NetworkException catch (e) {

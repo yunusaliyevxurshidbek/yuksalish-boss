@@ -15,7 +15,12 @@
       "Bash(dart analyze:*)",
       "Bash(flutter pub add:*)",
       "Bash(del \"d:\\\\Studio Projects\\\\yuksalish-boss\\\\lib\\\\features\\\\main_shell\\\\presentation\\\\bloc\\\\main_shell_state.dart\")",
-      "Bash(del \"d:\\\\Studio Projects\\\\yuksalish-boss\\\\lib\\\\features\\\\main_shell\\\\main_shell_provider.dart\")"
+      "Bash(del \"d:\\\\Studio Projects\\\\yuksalish-boss\\\\lib\\\\features\\\\main_shell\\\\main_shell_provider.dart\")",
+      "Bash(flutter clean:*)",
+      "Bash(gradlew.bat --stop)",
+      "Bash(.gradlew.bat --stop)",
+      "Bash(cmd.exe /c \"cd /d \"\"d:\\\\Studio Projects\\\\yuksalish-boss\\\\android\"\" && gradlew.bat --stop\")",
+      "Bash(cmd.exe /c \"cd /d \"\"d:\\\\Studio Projects\\\\yuksalish-boss\"\" && flutter build apk --debug\")"
     ]
   }
 }

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:yuksalish_mobile/core/error/exceptions.dart';
+import 'package:yuksalish_mobile/features/devices/domain/entities/device_info.dart';
 import '../../models/login/login_request_model.dart';
 import '../../models/login/login_response_model.dart';
 
@@ -7,6 +8,7 @@ abstract class LoginRemoteDataSource {
   Future<LoginResponseModel> login({
     required String phone,
     required String password,
+    required DeviceInfo deviceInfo,
   });
 }
 
@@ -19,10 +21,17 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   Future<LoginResponseModel> login({
     required String phone,
     required String password,
+    required DeviceInfo deviceInfo,
   }) async {
     final request = LoginRequestModel(
       phone: phone,
       password: password,
+      deviceId: deviceInfo.deviceId,
+      platform: deviceInfo.platform,
+      deviceModel: deviceInfo.deviceModel,
+      osVersion: deviceInfo.osVersion,
+      appVersion: deviceInfo.appVersion,
+      pushToken: deviceInfo.pushToken,
     );
 
     try {

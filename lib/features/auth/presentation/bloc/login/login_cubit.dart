@@ -28,10 +28,15 @@ class LoginCubit extends Cubit<LoginState> {
   }) async {
     emit(const LoginLoading());
     try {
+      // Get device info with push token for login
+      final deviceInfo = await _deviceInfoService.getDeviceInfo();
+      log('[LOGIN] Device info: ${deviceInfo.deviceId}, push_token: ${deviceInfo.pushToken != null ? 'present' : 'null'}');
+
       final result = await _loginUser(
         LoginUserParams(
           phone: phone,
           password: password,
+          deviceInfo: deviceInfo,
         ),
       );
       result.fold(
