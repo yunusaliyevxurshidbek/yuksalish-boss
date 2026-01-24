@@ -149,36 +149,46 @@ final router = GoRouter(
     GoRoute(
       name: 'dashboard',
       path: '/dashboard',
-      builder: (context, state) => const MainShellScreen(
-        child: DashboardScreen(),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: MainShellScreen(
+          child: DashboardScreen(),
+        ),
       ),
     ),
     GoRoute(
       name: 'analytics',
       path: '/analytics',
-      builder: (context, state) => const MainShellScreen(
-        child: AnalyticsScreen(),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: MainShellScreen(
+          child: AnalyticsScreen(),
+        ),
       ),
     ),
     GoRoute(
       name: 'projects',
       path: '/projects',
-      builder: (context, state) => const MainShellScreen(
-        child: ProjectsPage(),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: MainShellScreen(
+          child: ProjectsPage(),
+        ),
       ),
     ),
     GoRoute(
       name: 'finance',
       path: '/finance',
-      builder: (context, state) => const MainShellScreen(
-        child: FinanceScreen(),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: MainShellScreen(
+          child: FinanceScreen(),
+        ),
       ),
     ),
     GoRoute(
       name: 'approvals',
       path: '/approvals',
-      builder: (context, state) => const MainShellScreen(
-        child: ApprovalsScreen(),
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: MainShellScreen(
+          child: ApprovalsScreen(),
+        ),
       ),
     ),
     GoRoute(
