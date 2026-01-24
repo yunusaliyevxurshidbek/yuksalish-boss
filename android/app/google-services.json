@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "83837184567",
+    "project_id": "yuksalish-boss",
+    "storage_bucket": "yuksalish-boss.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83837184567:android:38eef259633ae4a380edb2",
+        "android_client_info": {
+          "package_name": "com.yuksalish.boss"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjrzmvJgEEp6ZtN9Zf212NqzP4gc5SeYg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

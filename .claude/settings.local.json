@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter analyze:*)",
+      "Bash(flutter pub get:*)",
+      "Bash(dir:*)",
+      "Bash(tree:*)",
+      "Bash(flutter build:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(find lib -name \"*.dart\" -type f -exec bash -c 'wc -l \"\"$1\"\" | awk \"\"{print \\\\$1, \\\\$NF}\"\"' _ {} ;)",
+      "Read(//d/Studio Projects/yuksalish-boss/**)",
+      "Bash(find:*)",
+      "Bash(echo:*)",
+      "Bash(git -C \"d:/Studio Projects/yuksalish-boss\" diff --name-status HEAD)",
+      "Bash(dart analyze:*)",
+      "Bash(flutter pub add:*)"
+    ]
+  }
+}

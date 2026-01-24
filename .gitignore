@@ -1,0 +1,25 @@
+# Flutter/Dart
+.dart_tool/
+.buildlog
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Flutter platform
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+
+android/.gradle/
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
