@@ -139,7 +139,14 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
     List<Approval> approvals,
     ApprovalTypeFilter filter,
   ) {
-    // Only show pending approvals
+    // Show approved items when approved filter is selected
+    if (filter == ApprovalTypeFilter.approved) {
+      return approvals
+          .where((a) => a.status == ApprovalStatus.approved)
+          .toList();
+    }
+
+    // For other filters, only show pending approvals
     final pending =
         approvals.where((a) => a.status == ApprovalStatus.pending).toList();
 
@@ -154,6 +161,7 @@ class ApprovalsCubit extends Cubit<ApprovalsState> {
       ApprovalTypeFilter.hr => ApprovalType.hr,
       ApprovalTypeFilter.budget => ApprovalType.budget,
       ApprovalTypeFilter.discount => ApprovalType.discount,
+      ApprovalTypeFilter.approved => null,
     };
 
     if (type == null) return pending;

@@ -49,6 +49,7 @@ class ApprovalFilterBar extends StatelessWidget {
       ApprovalTypeFilter.hr => 'approvals_filter_hr'.tr(),
       ApprovalTypeFilter.budget => 'approvals_filter_budget'.tr(),
       ApprovalTypeFilter.discount => 'approvals_filter_discount'.tr(),
+      ApprovalTypeFilter.approved => 'approvals_filter_approved'.tr(),
     };
   }
 
@@ -60,6 +61,7 @@ class ApprovalFilterBar extends StatelessWidget {
       ApprovalTypeFilter.hr => '👤',
       ApprovalTypeFilter.budget => '📊',
       ApprovalTypeFilter.discount => '🏷️',
+      ApprovalTypeFilter.approved => '✅',
     };
   }
 }

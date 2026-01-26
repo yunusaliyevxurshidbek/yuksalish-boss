@@ -43,6 +43,7 @@
 
   "auth_pin_phone_not_found": "Telefon raqam topilmadi. Iltimos, qayta kiring.",
   "auth_pin_changed_success": "PIN kod muvaffaqiyatli o'zgartirildi",
+  "auth_login_success": "Muvaffaqiyatli kirdingiz",
   "auth_pin_forgot": "Parolni unutdingizmi?",
   "auth_pin_security_badge": "BANK DARAJASIDAGI XAVFSIZLIK",
   "auth_pin_biometric_toggle": "Face ID va barmoq izini yoqish",
@@ -261,6 +262,7 @@
   "approvals_filter_hr": "HR",
   "approvals_filter_budget": "Byudjet",
   "approvals_filter_discount": "Chegirma",
+  "approvals_filter_approved": "Tasdiqlangan",
   "approvals_approve": "Tasdiqlash",
   "approvals_reject": "Rad etish",
   "approvals_comment": "Izoh (ixtiyoriy)",

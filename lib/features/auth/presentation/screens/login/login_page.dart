@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
           if (state is LoginSuccess) {
             CustomSnacbar.show(
               context,
-              text: state.message,
+              text: 'auth_login_success'.tr(),
             );
             if (context.mounted) {
               context.go('/pin_code');

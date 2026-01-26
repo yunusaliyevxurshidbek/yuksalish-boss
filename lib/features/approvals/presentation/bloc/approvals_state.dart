@@ -16,6 +16,7 @@ enum ApprovalTypeFilter {
   hr,
   budget,
   discount,
+  approved,
 }
 
 /// Action performed on approval
@@ -60,6 +61,7 @@ class ApprovalsState extends Equatable {
       ApprovalTypeFilter.hr => 'HR',
       ApprovalTypeFilter.budget => 'Byudjet',
       ApprovalTypeFilter.discount => 'Chegirma',
+      ApprovalTypeFilter.approved => 'Tasdiqlangan',
     };
   }
 

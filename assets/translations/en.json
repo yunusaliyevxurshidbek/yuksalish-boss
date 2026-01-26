@@ -43,6 +43,7 @@
 
   "auth_pin_phone_not_found": "Phone number not found. Please log in again.",
   "auth_pin_changed_success": "PIN code changed successfully",
+  "auth_login_success": "Login successful",
   "auth_pin_forgot": "Forgot your password?",
   "auth_pin_security_badge": "BANK GRADE SECURITY",
   "auth_pin_biometric_toggle": "Enable Face ID & Fingerprint",
@@ -261,6 +262,7 @@
   "approvals_filter_hr": "HR",
   "approvals_filter_budget": "Budget",
   "approvals_filter_discount": "Discount",
+  "approvals_filter_approved": "Approved",
   "approvals_approve": "Approve",
   "approvals_reject": "Reject",
   "approvals_comment": "Comment (optional)",

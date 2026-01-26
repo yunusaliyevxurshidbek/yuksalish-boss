@@ -43,6 +43,7 @@
 
   "auth_pin_phone_not_found": "Номер телефона не найден. Пожалуйста, войдите снова.",
   "auth_pin_changed_success": "PIN-код успешно изменен",
+  "auth_login_success": "Вход выполнен успешно",
   "auth_pin_forgot": "Забыли пароль?",
   "auth_pin_security_badge": "БАНКОВСКИЙ УРОВЕНЬ БЕЗОПАСНОСТИ",
   "auth_pin_biometric_toggle": "Включить Face ID и отпечаток",
@@ -261,6 +262,7 @@
   "approvals_filter_hr": "HR",
   "approvals_filter_budget": "Бюджет",
   "approvals_filter_discount": "Скидка",
+  "approvals_filter_approved": "Одобренные",
   "approvals_approve": "Одобрить",
   "approvals_reject": "Отклонить",
   "approvals_comment": "Комментарий (опционально)",
