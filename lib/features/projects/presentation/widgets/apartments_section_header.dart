@@ -63,7 +63,7 @@ class ApartmentsSectionHeader extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Text(
-                'projects_apartments_count'.tr(args: ['$apartmentsCount']),
+                'projects_apartments_count'.tr(namedArgs: {'count': '$apartmentsCount'}),
                 style: GoogleFonts.inter(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w600,
