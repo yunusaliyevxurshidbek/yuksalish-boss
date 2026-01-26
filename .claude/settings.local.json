@@ -20,7 +20,10 @@
       "Bash(gradlew.bat --stop)",
       "Bash(.gradlew.bat --stop)",
       "Bash(cmd.exe /c \"cd /d \"\"d:\\\\Studio Projects\\\\yuksalish-boss\\\\android\"\" && gradlew.bat --stop\")",
-      "Bash(cmd.exe /c \"cd /d \"\"d:\\\\Studio Projects\\\\yuksalish-boss\"\" && flutter build apk --debug\")"
+      "Bash(cmd.exe /c \"cd /d \"\"d:\\\\Studio Projects\\\\yuksalish-boss\"\" && flutter build apk --debug\")",
+      "Bash(export LANG=en_US.UTF-8)",
+      "Bash(export LC_ALL=en_US.UTF-8)",
+      "Bash(pod install:*)"
     ]
   }
 }
