@@ -1040,8 +1040,12 @@
   "auth_phone_format_example": "90 123 45 67",
 
   "onboarding_slide_1_title": "Invest in Your Future with Yuksalish",
+  "onboarding_slide_1_description": "Discover exclusive luxury real estate opportunities tailored for generational wealth",
   "onboarding_slide_2_title": "Build Long-Term Wealth Through Smart Property",
+  "onboarding_slide_2_description": "Explore premium real estate investments designed for stability and lasting value",
   "onboarding_slide_3_title": "Secure Your Legacy with Real Assets",
+  "onboarding_slide_3_description": "Access high-end property opportunities crafted for growth and financial security",
+  "onboarding_get_started": "Get Started",
 
   "notification_payment_received": "Payment Received",
   "notification_approval_pending": "Awaiting Approval",

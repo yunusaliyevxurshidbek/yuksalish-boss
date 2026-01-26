@@ -1039,9 +1039,13 @@
   "auth_start_over": "Начать заново",
   "auth_phone_format_example": "90 123 45 67",
 
-  "onboarding_slide_1_title": "Инвестируйте в свое будущее с Yuksalish",
-  "onboarding_slide_2_title": "Создавайте долгосрочное благосостояние через смарт-недвижимость",
-  "onboarding_slide_3_title": "Обезопасьте свое наследие реальными активами",
+  "onboarding_slide_1_title": "Инвестируйте в будущее с Yuksalish",
+  "onboarding_slide_1_description": "Подберите премиальную недвижимость, чтобы сохранять и приумножать капитал.",
+  "onboarding_slide_2_title": "Недвижимость с долгосрочной ценностью",
+  "onboarding_slide_2_description": "Рассмотрите объекты в перспективных локациях с высокой ликвидностью и ростом стоимости.",
+  "onboarding_slide_3_title": "Защитите капитал реальными активами",
+  "onboarding_slide_3_description": "Получите доступ к надежным инвестиционным возможностям для финансовой стабильности.",
+  "onboarding_get_started": "Начать",
 
   "notification_payment_received": "Платеж получен",
   "notification_approval_pending": "Ожидание одобрения",

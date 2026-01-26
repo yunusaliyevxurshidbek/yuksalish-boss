@@ -1039,9 +1039,13 @@
   "auth_start_over": "Qaytadan boshlang",
   "auth_phone_format_example": "90 123 45 67",
 
-  "onboarding_slide_1_title": "Kelajakka sarmoya qo'ying Yuksalish bilan",
-  "onboarding_slide_2_title": "Aqlli mulk orqali uzoq muddatli boylikni quritish",
-  "onboarding_slide_3_title": "Haqiqiy aktivlar bilan meros xavfsizligini ta'minlang",
+  "onboarding_slide_1_title": "Yuksalish bilan ishonchli sarmoya qiling",
+  "onboarding_slide_1_description": "Premium ko‘chmas mulk takliflari orqali kapitalingizni barqaror yo‘nalishda oshiring.",
+  "onboarding_slide_2_title": "Uzoq muddatli qiymat yaratadigan mulklar",
+  "onboarding_slide_2_description": "Likvidligi yuqori, istiqbolli hududlardagi mulklar bilan rejalaringizni mustahkamlang.",
+  "onboarding_slide_3_title": "Aktivlar bilan kelajagingizni himoya qiling",
+  "onboarding_slide_3_description": "Moliyaviy barqarorlik va o‘sishga xizmat qiladigan real aktivlarga oson kirish imkoniyati.",
+  "onboarding_get_started": "Boshlash",
 
   "notification_payment_received": "To'lov qabul qilindi",
   "notification_approval_pending": "Tasdiqlash kutilmoqda",

@@ -1,8 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/my_shared_preferences.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -77,21 +77,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: PageView(
                       controller: _controller,
                       physics: const BouncingScrollPhysics(),
-                      children: const [
+                      children: [
                         OnboardingPageItem(
-                          title: "Invest in Your\n Future with\n Yuksalish",
-                          description:
-                              "Discover exclusive luxury real estate\n opportunities tailored for generational\n wealth",
+                          title: 'onboarding_slide_1_title'.tr(),
+                          description: 'onboarding_slide_1_description'.tr(),
                         ),
                         OnboardingPageItem(
-                          title: "Build Long-Term\n Wealth Through\n Smart Property",
-                          description:
-                              "Explore premium real estate\n investments designed for stability\n and lasting value",
+                          title: 'onboarding_slide_2_title'.tr(),
+                          description: 'onboarding_slide_2_description'.tr(),
                         ),
                         OnboardingPageItem(
-                          title: "Secure Your\n Legacy with\n Real Assets",
-                          description:
-                              "Access high-end property\n opportunities crafted for growth\n and financial security",
+                          title: 'onboarding_slide_3_title'.tr(),
+                          description: 'onboarding_slide_3_description'.tr(),
                         ),
                       ],
                     ),
@@ -116,7 +113,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                   // get_started_button:
                   PressableButton(
-                    text: 'Get Started',
+                    text: 'onboarding_get_started'.tr(),
                     svgIcon: 'assets/icons/arrow_right.svg',
                     backgroundColor: AppColors.white,
                     textColor: AppColors.primaryNavy,
