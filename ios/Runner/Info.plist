@@ -26,12 +26,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Profil rasmingizni olish uchun kameradan foydalanishga ruxsat bering.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>We use Face ID to securely unlock the app and protect your investment portfolio.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Profil rasmingizni tanlash uchun fotoalbomga kirishga ruxsat bering.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

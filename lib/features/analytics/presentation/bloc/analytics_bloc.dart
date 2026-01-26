@@ -12,6 +12,7 @@ import '../../data/models/analytics_payment.dart';
 import '../../data/models/analytics_period.dart';
 import '../../data/models/analytics_project.dart';
 import '../../data/repositories/analytics_repository.dart';
+import '../../data/services/analytics_pdf_generator.dart';
 import '../../../../core/error/exceptions.dart';
 
 part 'analytics_event.dart';
@@ -300,14 +301,16 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     emit(state.copyWith(isExporting: true, clearExportStatus: true));
 
     try {
-      final path = await _repository.exportStatsPdf(
+      final result = await _repository.exportStatsPdf(
         stats: state.stats,
         contracts: state.contracts,
         period: state.selectedPeriod,
+        translations: event.translations,
       );
       emit(state.copyWith(
         isExporting: false,
-        exportSuccessPath: path,
+        exportSuccessPath: result.filePath,
+        savedToDownloads: result.savedToDownloads,
       ));
     } catch (e) {
       emit(state.copyWith(

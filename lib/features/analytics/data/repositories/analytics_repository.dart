@@ -17,10 +17,11 @@ abstract class AnalyticsRepository {
   Future<List<AnalyticsPayment>> fetchPayments();
   Future<List<AnalyticsProject>> fetchProjects();
   Future<List<AnalyticsApartment>> fetchApartments();
-  Future<String> exportStatsPdf({
+  Future<PdfGenerationResult> exportStatsPdf({
     required CrmStatsModel stats,
     required List<AnalyticsContract> contracts,
     required AnalyticsPeriod period,
+    required PdfTranslations translations,
   });
 
   CrmStatsModel? getCachedStats(AnalyticsPeriod period);
@@ -131,15 +132,17 @@ class AnalyticsRepositoryImpl implements AnalyticsRepository {
   DateTime? getLastUpdated() => cache.getLastUpdated();
 
   @override
-  Future<String> exportStatsPdf({
+  Future<PdfGenerationResult> exportStatsPdf({
     required CrmStatsModel stats,
     required List<AnalyticsContract> contracts,
     required AnalyticsPeriod period,
+    required PdfTranslations translations,
   }) async {
     return _pdfGenerator.generateReport(
       stats: stats,
       contracts: contracts,
       period: period,
+      translations: translations,
     );
   }
 }

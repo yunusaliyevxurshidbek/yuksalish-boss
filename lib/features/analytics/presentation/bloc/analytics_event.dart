@@ -64,7 +64,12 @@ class RefreshRevenueBreakdown extends AnalyticsEvent {
 
 /// Event to export analytics as PDF
 class ExportAnalyticsPdf extends AnalyticsEvent {
-  const ExportAnalyticsPdf();
+  final PdfTranslations translations;
+
+  const ExportAnalyticsPdf({required this.translations});
+
+  @override
+  List<Object?> get props => [translations];
 }
 
 /// Event to clear export status (after showing toast)

@@ -23,6 +23,7 @@ class AnalyticsState extends Equatable {
   final bool isExporting;
   final String? exportError;
   final String? exportSuccessPath;
+  final bool savedToDownloads;
 
   const AnalyticsState({
     required this.status,
@@ -43,6 +44,7 @@ class AnalyticsState extends Equatable {
     this.isExporting = false,
     this.exportError,
     this.exportSuccessPath,
+    this.savedToDownloads = false,
   });
 
   factory AnalyticsState.initial() {
@@ -82,6 +84,7 @@ class AnalyticsState extends Equatable {
     bool? isExporting,
     String? exportError,
     String? exportSuccessPath,
+    bool? savedToDownloads,
     bool clearExportStatus = false,
     bool clearErrorMessage = false,
   }) {
@@ -104,6 +107,7 @@ class AnalyticsState extends Equatable {
       isExporting: isExporting ?? this.isExporting,
       exportError: clearExportStatus ? null : (exportError ?? this.exportError),
       exportSuccessPath: clearExportStatus ? null : (exportSuccessPath ?? this.exportSuccessPath),
+      savedToDownloads: clearExportStatus ? false : (savedToDownloads ?? this.savedToDownloads),
     );
   }
 
@@ -135,5 +139,6 @@ class AnalyticsState extends Equatable {
         isExporting,
         exportError,
         exportSuccessPath,
+        savedToDownloads,
       ];
 }

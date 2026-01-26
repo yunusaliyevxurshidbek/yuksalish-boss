@@ -1,24 +1,89 @@
 import 'dart:io';
 
 import 'package:intl/intl.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:share_plus/share_plus.dart';
 
 import '../../../dashboard/data/models/crm_stats_model.dart';
 import '../models/analytics_contract.dart';
 import '../models/analytics_period.dart';
 
+/// Result of PDF generation
+class PdfGenerationResult {
+  final String filePath;
+  final bool savedToDownloads;
+
+  const PdfGenerationResult({
+    required this.filePath,
+    required this.savedToDownloads,
+  });
+}
+
+/// Translations for PDF content
+class PdfTranslations {
+  final String reportTitle;
+  final String period;
+  final String keyMetrics;
+  final String totalRevenue;
+  final String closedDeals;
+  final String activeLeads;
+  final String totalClients;
+  final String activeContracts;
+  final String conversion;
+  final String contractStatus;
+  final String status;
+  final String count;
+  final String leadStages;
+  final String stage;
+  final String recentContracts;
+  final String number;
+  final String client;
+  final String amount;
+  final String pageFormat;
+  final String moreContracts;
+  final Map<String, String> statusTranslations;
+  final Map<String, String> stageTranslations;
+
+  const PdfTranslations({
+    required this.reportTitle,
+    required this.period,
+    required this.keyMetrics,
+    required this.totalRevenue,
+    required this.closedDeals,
+    required this.activeLeads,
+    required this.totalClients,
+    required this.activeContracts,
+    required this.conversion,
+    required this.contractStatus,
+    required this.status,
+    required this.count,
+    required this.leadStages,
+    required this.stage,
+    required this.recentContracts,
+    required this.number,
+    required this.client,
+    required this.amount,
+    required this.pageFormat,
+    required this.moreContracts,
+    required this.statusTranslations,
+    required this.stageTranslations,
+  });
+}
+
 /// Service for generating PDF reports from analytics data.
 class AnalyticsPdfGenerator {
   static final _currencyFormat = NumberFormat('#,###', 'uz_UZ');
 
-  /// Generates a PDF report and returns the file path.
-  Future<String> generateReport({
+  /// Generates a PDF report and saves to Downloads folder.
+  /// On Android: Saves directly to Downloads folder.
+  /// On iOS: Opens share sheet for user to save.
+  Future<PdfGenerationResult> generateReport({
     required CrmStatsModel stats,
     required List<AnalyticsContract> contracts,
     required AnalyticsPeriod period,
+    required PdfTranslations translations,
   }) async {
     final pdf = pw.Document();
 
@@ -27,34 +92,98 @@ class AnalyticsPdfGenerator {
         pageFormat: PdfPageFormat.a4,
         margin: const pw.EdgeInsets.all(32),
         build: (context) => [
-          _buildHeader(period),
+          _buildHeader(period, translations),
           pw.SizedBox(height: 24),
-          _buildKpiSection(stats),
+          _buildKpiSection(stats, translations),
           pw.SizedBox(height: 24),
-          _buildContractsByStatusSection(stats),
+          _buildContractsByStatusSection(stats, translations),
           pw.SizedBox(height: 24),
-          _buildLeadsByStageSection(stats),
+          _buildLeadsByStageSection(stats, translations),
           if (contracts.isNotEmpty) ...[
             pw.SizedBox(height: 24),
-            _buildContractsTable(contracts),
+            _buildContractsTable(contracts, translations),
           ],
         ],
-        footer: (context) => _buildFooter(context),
+        footer: (context) => _buildFooter(context, translations),
       ),
     );
 
-    final output = await getApplicationDocumentsDirectory();
+    final pdfBytes = await pdf.save();
     final timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
-    final file = File('${output.path}/analytics_report_$timestamp.pdf');
-    await file.writeAsBytes(await pdf.save());
+    final fileName = 'analytics_report_$timestamp.pdf';
 
-    // Open the PDF file
-    await OpenFilex.open(file.path);
+    if (Platform.isAndroid) {
+      // Try to save to Downloads folder on Android
+      final savedPath = await _saveToDownloads(pdfBytes, fileName);
+      if (savedPath != null) {
+        return PdfGenerationResult(
+          filePath: savedPath,
+          savedToDownloads: true,
+        );
+      }
+    }
 
-    return file.path;
+    // Fallback: Save to temp and open share sheet (iOS or Android fallback)
+    final output = await getTemporaryDirectory();
+    final file = File('${output.path}/$fileName');
+    await file.writeAsBytes(pdfBytes);
+
+    // Open share sheet
+    await Share.shareXFiles(
+      [XFile(file.path)],
+      subject: translations.reportTitle,
+    );
+
+    return PdfGenerationResult(
+      filePath: file.path,
+      savedToDownloads: false,
+    );
   }
 
-  pw.Widget _buildHeader(AnalyticsPeriod period) {
+  /// Attempts to save PDF to Android Downloads folder.
+  /// Returns the file path if successful, null otherwise.
+  Future<String?> _saveToDownloads(List<int> bytes, String fileName) async {
+    try {
+      // Try common Downloads folder paths on Android
+      final downloadPaths = [
+        '/storage/emulated/0/Download',
+        '/sdcard/Download',
+      ];
+
+      for (final path in downloadPaths) {
+        final dir = Directory(path);
+        if (await dir.exists()) {
+          final file = File('$path/$fileName');
+          await file.writeAsBytes(bytes);
+          return file.path;
+        }
+      }
+
+      // Fallback: Try external storage directory
+      final externalDir = await getExternalStorageDirectory();
+      if (externalDir != null) {
+        // Navigate up to find Download folder
+        // External storage is usually /storage/emulated/0/Android/data/package/files
+        final parts = externalDir.path.split('/');
+        final storageIndex = parts.indexOf('Android');
+        if (storageIndex > 0) {
+          final basePath = parts.sublist(0, storageIndex).join('/');
+          final downloadDir = Directory('$basePath/Download');
+          if (await downloadDir.exists()) {
+            final file = File('${downloadDir.path}/$fileName');
+            await file.writeAsBytes(bytes);
+            return file.path;
+          }
+        }
+      }
+
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  pw.Widget _buildHeader(AnalyticsPeriod period, PdfTranslations translations) {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
@@ -62,7 +191,7 @@ class AnalyticsPdfGenerator {
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
           children: [
             pw.Text(
-              'Tahlil hisoboti',
+              translations.reportTitle,
               style: pw.TextStyle(
                 fontSize: 24,
                 fontWeight: pw.FontWeight.bold,
@@ -85,7 +214,7 @@ class AnalyticsPdfGenerator {
             borderRadius: pw.BorderRadius.circular(4),
           ),
           child: pw.Text(
-            'Davr: ${period.label}',
+            translations.period.replaceAll('{period}', period.label),
             style: pw.TextStyle(
               fontSize: 12,
               fontWeight: pw.FontWeight.bold,
@@ -99,12 +228,12 @@ class AnalyticsPdfGenerator {
     );
   }
 
-  pw.Widget _buildKpiSection(CrmStatsModel stats) {
+  pw.Widget _buildKpiSection(CrmStatsModel stats, PdfTranslations translations) {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         pw.Text(
-          'Asosiy ko\'rsatkichlar',
+          translations.keyMetrics,
           style: pw.TextStyle(
             fontSize: 16,
             fontWeight: pw.FontWeight.bold,
@@ -113,21 +242,21 @@ class AnalyticsPdfGenerator {
         pw.SizedBox(height: 12),
         pw.Row(
           children: [
-            _buildKpiCard('Umumiy daromad', _formatCurrency(stats.totalRevenue)),
+            _buildKpiCard(translations.totalRevenue, _formatCurrency(stats.totalRevenue)),
             pw.SizedBox(width: 12),
-            _buildKpiCard('Yopilgan bitimlar', stats.completedContracts.toString()),
+            _buildKpiCard(translations.closedDeals, stats.completedContracts.toString()),
             pw.SizedBox(width: 12),
-            _buildKpiCard('Faol lidlar', stats.activeLeads.toString()),
+            _buildKpiCard(translations.activeLeads, stats.activeLeads.toString()),
           ],
         ),
         pw.SizedBox(height: 12),
         pw.Row(
           children: [
-            _buildKpiCard('Jami mijozlar', stats.totalClients.toString()),
+            _buildKpiCard(translations.totalClients, stats.totalClients.toString()),
             pw.SizedBox(width: 12),
-            _buildKpiCard('Faol shartnomalar', stats.activeContracts.toString()),
+            _buildKpiCard(translations.activeContracts, stats.activeContracts.toString()),
             pw.SizedBox(width: 12),
-            _buildKpiCard('Konversiya', '${stats.conversionRate.toStringAsFixed(1)}%'),
+            _buildKpiCard(translations.conversion, '${stats.conversionRate.toStringAsFixed(1)}%'),
           ],
         ),
       ],
@@ -166,7 +295,7 @@ class AnalyticsPdfGenerator {
     );
   }
 
-  pw.Widget _buildContractsByStatusSection(CrmStatsModel stats) {
+  pw.Widget _buildContractsByStatusSection(CrmStatsModel stats, PdfTranslations translations) {
     final statuses = stats.contractsByStatus;
     if (statuses.isEmpty) return pw.SizedBox();
 
@@ -174,7 +303,7 @@ class AnalyticsPdfGenerator {
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         pw.Text(
-          'Shartnomalar holati',
+          translations.contractStatus,
           style: pw.TextStyle(
             fontSize: 16,
             fontWeight: pw.FontWeight.bold,
@@ -191,14 +320,14 @@ class AnalyticsPdfGenerator {
             pw.TableRow(
               decoration: const pw.BoxDecoration(color: PdfColors.grey100),
               children: [
-                _tableCell('Holat', isHeader: true),
-                _tableCell('Soni', isHeader: true),
+                _tableCell(translations.status, isHeader: true),
+                _tableCell(translations.count, isHeader: true),
               ],
             ),
             ...statuses.entries.map(
               (e) => pw.TableRow(
                 children: [
-                  _tableCell(_translateStatus(e.key)),
+                  _tableCell(_translateStatus(e.key, translations)),
                   _tableCell(e.value.toString()),
                 ],
               ),
@@ -209,7 +338,7 @@ class AnalyticsPdfGenerator {
     );
   }
 
-  pw.Widget _buildLeadsByStageSection(CrmStatsModel stats) {
+  pw.Widget _buildLeadsByStageSection(CrmStatsModel stats, PdfTranslations translations) {
     final stages = stats.leadsByStage;
     if (stages.isEmpty) return pw.SizedBox();
 
@@ -220,7 +349,7 @@ class AnalyticsPdfGenerator {
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         pw.Text(
-          'Lidlar bosqichlari',
+          translations.leadStages,
           style: pw.TextStyle(
             fontSize: 16,
             fontWeight: pw.FontWeight.bold,
@@ -237,14 +366,14 @@ class AnalyticsPdfGenerator {
             pw.TableRow(
               decoration: const pw.BoxDecoration(color: PdfColors.grey100),
               children: [
-                _tableCell('Bosqich', isHeader: true),
-                _tableCell('Soni', isHeader: true),
+                _tableCell(translations.stage, isHeader: true),
+                _tableCell(translations.count, isHeader: true),
               ],
             ),
             ...nonZeroStages.map(
               (e) => pw.TableRow(
                 children: [
-                  _tableCell(_translateStage(e.key)),
+                  _tableCell(_translateStage(e.key, translations)),
                   _tableCell(e.value.toString()),
                 ],
               ),
@@ -255,14 +384,14 @@ class AnalyticsPdfGenerator {
     );
   }
 
-  pw.Widget _buildContractsTable(List<AnalyticsContract> contracts) {
+  pw.Widget _buildContractsTable(List<AnalyticsContract> contracts, PdfTranslations translations) {
     final recentContracts = contracts.take(10).toList();
 
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         pw.Text(
-          'So\'nggi shartnomalar',
+          translations.recentContracts,
           style: pw.TextStyle(
             fontSize: 16,
             fontWeight: pw.FontWeight.bold,
@@ -281,10 +410,10 @@ class AnalyticsPdfGenerator {
             pw.TableRow(
               decoration: const pw.BoxDecoration(color: PdfColors.grey100),
               children: [
-                _tableCell('Raqam', isHeader: true),
-                _tableCell('Mijoz', isHeader: true),
-                _tableCell('Summa', isHeader: true),
-                _tableCell('Holat', isHeader: true),
+                _tableCell(translations.number, isHeader: true),
+                _tableCell(translations.client, isHeader: true),
+                _tableCell(translations.amount, isHeader: true),
+                _tableCell(translations.status, isHeader: true),
               ],
             ),
             ...recentContracts.map(
@@ -293,7 +422,7 @@ class AnalyticsPdfGenerator {
                   _tableCell(contract.contractNumber ?? '-'),
                   _tableCell(contract.clientName),
                   _tableCell(_formatCurrency(contract.totalAmount)),
-                  _tableCell(_translateStatus(contract.status)),
+                  _tableCell(_translateStatus(contract.status, translations)),
                 ],
               ),
             ),
@@ -303,7 +432,7 @@ class AnalyticsPdfGenerator {
           pw.Padding(
             padding: const pw.EdgeInsets.only(top: 8),
             child: pw.Text(
-              '... va yana ${contracts.length - 10} ta shartnoma',
+              translations.moreContracts.replaceAll('{count}', (contracts.length - 10).toString()),
               style: const pw.TextStyle(
                 fontSize: 10,
                 color: PdfColors.grey600,
@@ -327,12 +456,14 @@ class AnalyticsPdfGenerator {
     );
   }
 
-  pw.Widget _buildFooter(pw.Context context) {
+  pw.Widget _buildFooter(pw.Context context, PdfTranslations translations) {
     return pw.Container(
       alignment: pw.Alignment.centerRight,
       margin: const pw.EdgeInsets.only(top: 16),
       child: pw.Text(
-        'Sahifa ${context.pageNumber} / ${context.pagesCount}',
+        translations.pageFormat
+            .replaceAll('{current}', context.pageNumber.toString())
+            .replaceAll('{total}', context.pagesCount.toString()),
         style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
       ),
     );
@@ -347,31 +478,11 @@ class AnalyticsPdfGenerator {
     return '${_currencyFormat.format(amount)} UZS';
   }
 
-  String _translateStatus(String status) {
-    const translations = {
-      'draft': 'Qoralama',
-      'active': 'Faol',
-      'completed': 'Yakunlangan',
-      'terminated': 'Bekor qilingan',
-      'cancelled': 'Bekor qilingan',
-      'rejected': 'Rad etilgan',
-      'pending': 'Kutilmoqda',
-    };
-    return translations[status.toLowerCase()] ?? status;
+  String _translateStatus(String status, PdfTranslations translations) {
+    return translations.statusTranslations[status.toLowerCase()] ?? status;
   }
 
-  String _translateStage(String stage) {
-    const translations = {
-      'new': 'Yangi',
-      'contacted': 'Bog\'lanildi',
-      'qualified': 'Tasdiqlandi',
-      'showing': 'Ko\'rsatuv',
-      'negotiation': 'Muzokara',
-      'reservation': 'Band qilish',
-      'contract': 'Shartnoma',
-      'won': 'Yutildi',
-      'lost': 'Yo\'qotildi',
-    };
-    return translations[stage.toLowerCase()] ?? stage;
+  String _translateStage(String stage, PdfTranslations translations) {
+    return translations.stageTranslations[stage.toLowerCase()] ?? stage;
   }
 }
