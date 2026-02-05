@@ -1100,5 +1100,10 @@
   "apartment_detail_additional_info": "Дополнительная информация",
   "apartment_detail_not_specified": "Не указано",
   "apartment_detail_yes": "Да",
-  "apartment_detail_no": "Нет"
+  "apartment_detail_no": "Нет",
+
+  "force_update_title": "Требуется обновление",
+  "force_update_message": "Доступна новая версия приложения. Пожалуйста, обновите для продолжения работы.",
+  "force_update_min_version": "Минимальная версия: {0}",
+  "force_update_button": "Обновить"
 }

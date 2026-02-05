@@ -8,6 +8,7 @@ import 'core/network/dio_settings.dart';
 import 'core/localization/bloc/language_bloc.dart';
 import 'core/localization/language_prefs.dart';
 import 'core/services/crypto_service.dart';
+import 'core/services/version_check_service.dart';
 import 'core/theme/theme_cubit.dart';
 import 'core/theme/theme_prefs.dart';
 import 'features/app_lock/data/datasources/local/app_lock_local_datasource.dart';
@@ -173,6 +174,13 @@ Future<void> init() async {
     ),
   );
   getIt.registerLazySingleton<Dio>(() => getIt<DioSettings>().client);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // VERSION CHECK SERVICE
+  // ═══════════════════════════════════════════════════════════════════════════
+  getIt.registerLazySingleton<VersionCheckService>(
+    () => VersionCheckService(getIt<Dio>()),
+  );
 
   // ═══════════════════════════════════════════════════════════════════════════
   // AUTH FEATURE - COMPANY

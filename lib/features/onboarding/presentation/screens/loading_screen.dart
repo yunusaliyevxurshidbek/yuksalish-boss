@@ -5,7 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import '../../../../core/services/log_service.dart';
 import '../../../../core/services/my_shared_preferences.dart';
+import '../../../../core/services/version_check_service.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/force_update_dialog.dart';
+import '../../../../injection_container.dart';
 import '../../../app_lock/presentation/bloc/app_lock/app_lock_bloc.dart';
 import '../../../app_lock/presentation/bloc/app_lock/app_lock_state.dart';
 
@@ -19,11 +22,13 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
   bool _minTimeElapsed = false;
   bool _hasNavigated = false;
+  bool _updateRequired = false;
 
   @override
   void initState() {
     LogService.i(MySharedPreferences.getToken().toString());
     super.initState();
+    _checkForUpdate();
     Timer(const Duration(seconds: 2), () {
       if (!mounted) return;
       _minTimeElapsed = true;
@@ -31,8 +36,22 @@ class _LoadingScreenState extends State<LoadingScreen> {
     });
   }
 
+  Future<void> _checkForUpdate() async {
+    final versionCheckService = getIt<VersionCheckService>();
+    final config = await versionCheckService.checkForRequiredUpdate();
+    if (!mounted) return;
+    if (config != null) {
+      _updateRequired = true;
+      ForceUpdateDialog.show(
+        context,
+        config: config,
+        versionCheckService: versionCheckService,
+      );
+    }
+  }
+
   void _tryNavigate() {
-    if (_hasNavigated) return;
+    if (_hasNavigated || _updateRequired) return;
 
     final appLockBloc = context.read<AppLockBloc>();
     final state = appLockBloc.state;

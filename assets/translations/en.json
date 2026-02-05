@@ -1100,5 +1100,10 @@
   "apartment_detail_additional_info": "Additional Information",
   "apartment_detail_not_specified": "Not specified",
   "apartment_detail_yes": "Yes",
-  "apartment_detail_no": "No"
+  "apartment_detail_no": "No",
+
+  "force_update_title": "Update Required",
+  "force_update_message": "A new version of the app is available. Please update to continue using the app.",
+  "force_update_min_version": "Minimum version: {0}",
+  "force_update_button": "Update Now"
 }

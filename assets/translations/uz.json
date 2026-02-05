@@ -1100,5 +1100,10 @@
   "apartment_detail_additional_info": "Qo'shimcha ma'lumotlar",
   "apartment_detail_not_specified": "Belgilanmagan",
   "apartment_detail_yes": "Ha",
-  "apartment_detail_no": "Yo'q"
+  "apartment_detail_no": "Yo'q",
+
+  "force_update_title": "Yangilash talab qilinadi",
+  "force_update_message": "Ilovaning yangi versiyasi mavjud. Davom etish uchun iltimos yangilang.",
+  "force_update_min_version": "Minimal versiya: {0}",
+  "force_update_button": "Yangilash"
 }
