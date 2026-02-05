@@ -151,36 +151,39 @@ class OtpCodeField extends StatelessWidget {
           ),
         ),
         SizedBox(height: 8.h),
-        TextField(
-          controller: controller,
-          focusNode: focusNode,
-          keyboardType: TextInputType.number,
-          maxLength: 6,
-          textInputAction: TextInputAction.done,
-          decoration: InputDecoration(
-            hintText: 'profile_phone_otp_hint'.tr(),
-            hintStyle: AppTextStyles.bodyMedium.copyWith(
-              color: colors.textSecondary,
-            ),
-            counterText: '',
-            filled: true,
-            fillColor: colors.surfaceElevated,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: colors.border),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: colors.border),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: colors.primary, width: 2),
-            ),
-            errorText: errorText,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: 16.w,
-              vertical: 12.h,
+        AutofillGroup(
+          child: TextField(
+            controller: controller,
+            focusNode: focusNode,
+            keyboardType: TextInputType.number,
+            autofillHints: const [AutofillHints.oneTimeCode],
+            maxLength: 6,
+            textInputAction: TextInputAction.done,
+            decoration: InputDecoration(
+              hintText: 'profile_phone_otp_hint'.tr(),
+              hintStyle: AppTextStyles.bodyMedium.copyWith(
+                color: colors.textSecondary,
+              ),
+              counterText: '',
+              filled: true,
+              fillColor: colors.surfaceElevated,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.r),
+                borderSide: BorderSide(color: colors.border),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.r),
+                borderSide: BorderSide(color: colors.border),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.r),
+                borderSide: BorderSide(color: colors.primary, width: 2),
+              ),
+              errorText: errorText,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16.w,
+                vertical: 12.h,
+              ),
             ),
           ),
         ),

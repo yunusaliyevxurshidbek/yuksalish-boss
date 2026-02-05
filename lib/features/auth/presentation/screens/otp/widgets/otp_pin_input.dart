@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -64,22 +66,25 @@ class OtpPinInput extends StatelessWidget {
       ),
     );
 
-    return Pinput(
-      controller: controller,
-      focusNode: focusNode,
-      length: 6,
-      defaultPinTheme: defaultPinTheme,
-      focusedPinTheme: focusedPinTheme,
-      submittedPinTheme: submittedPinTheme,
-      showCursor: true,
-      cursor: Container(
-        width: 2,
-        height: 24.h,
-        color: theme.colorScheme.primary,
+    return AutofillGroup(
+      child: Pinput(
+        controller: controller,
+        focusNode: focusNode,
+        length: 6,
+        defaultPinTheme: defaultPinTheme,
+        focusedPinTheme: focusedPinTheme,
+        submittedPinTheme: submittedPinTheme,
+        showCursor: true,
+        cursor: Container(
+          width: 2,
+          height: 24.h,
+          color: theme.colorScheme.primary,
+        ),
+        onCompleted: onCompleted,
+        autofillHints: const [AutofillHints.oneTimeCode],
+        readOnly: Platform.isAndroid,
+        enabled: true,
       ),
-      onCompleted: onCompleted,
-      readOnly: true,
-      enabled: true,
     );
   }
 }

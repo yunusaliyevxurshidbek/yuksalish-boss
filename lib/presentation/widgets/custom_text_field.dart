@@ -13,6 +13,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputAction textInputAction;
   final Widget? suffixIcon;
   final Function(String)? onFieldSubmitted;
+  final Iterable<String>? autofillHints;
 
   const CustomTextField({
     super.key,
@@ -25,6 +26,7 @@ class CustomTextField extends StatelessWidget {
     this.textInputAction = TextInputAction.next,
     this.suffixIcon,
     this.onFieldSubmitted,
+    this.autofillHints,
   });
 
   @override
@@ -51,6 +53,7 @@ class CustomTextField extends StatelessWidget {
           focusNode: focusNode,
           obscureText: obscureText,
           textInputAction: textInputAction,
+          autofillHints: autofillHints,
           onFieldSubmitted: onFieldSubmitted,
           style: GoogleFonts.urbanist(
             fontSize: 16.sp,

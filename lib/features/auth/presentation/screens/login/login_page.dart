@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show TextInput;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -68,6 +69,10 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
+            // Notify the OS that autofill is complete so the system
+            // prompts the user to save credentials (Google Autofill /
+            // iCloud Keychain).
+            TextInput.finishAutofillContext();
             CustomSnacbar.show(
               context,
               text: 'auth_login_success'.tr(),
@@ -138,50 +143,60 @@ class _LoginPageState extends State<LoginPage> {
 
                           SizedBox(height: 32.h),
 
-                          // phone_number_label:
-                          Text(
-                            'auth_login_phone_label'.tr(),
-                            style: GoogleFonts.montserrat(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
-                              color: theme.textTheme.titleMedium?.color,
-                              letterSpacing: 1.2,
+                          // AutofillGroup groups phone & password so the OS
+                          // password manager can suggest saved credentials.
+                          AutofillGroup(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // phone_number_label:
+                                Text(
+                                  'auth_login_phone_label'.tr(),
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: theme.textTheme.titleMedium?.color,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+
+                                SizedBox(height: 12.h),
+
+                                // phone_number_field:
+                                _buildPhoneField(context),
+
+                                SizedBox(height: 20.h),
+
+                                // password_field:
+                                CustomTextField(
+                                  label: 'auth_login_password_label'.tr(),
+                                  controller: _passwordController,
+                                  focusNode: _passwordFocus,
+                                  prefixIcon: Icons.lock_outline,
+                                  hintText: 'auth_login_password_hint'.tr(),
+                                  obscureText: _obscurePassword,
+                                  textInputAction: TextInputAction.done,
+                                  autofillHints: const [AutofillHints.password],
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _obscurePassword
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      color: theme.textTheme.bodySmall?.color,
+                                      size: 20.sp,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _obscurePassword = !_obscurePassword;
+                                      });
+                                    },
+                                  ),
+                                  onFieldSubmitted: (_) {
+                                    _onLogin(context);
+                                  },
+                                ),
+                              ],
                             ),
-                          ),
-
-                          SizedBox(height: 12.h),
-
-                          // phone_number_field:
-                          _buildPhoneField(context),
-
-                          SizedBox(height: 20.h),
-
-                          // password_field:
-                          CustomTextField(
-                            label: 'auth_login_password_label'.tr(),
-                            controller: _passwordController,
-                            focusNode: _passwordFocus,
-                            prefixIcon: Icons.lock_outline,
-                            hintText: 'auth_login_password_hint'.tr(),
-                            obscureText: _obscurePassword,
-                            textInputAction: TextInputAction.done,
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscurePassword
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: theme.textTheme.bodySmall?.color,
-                                size: 20.sp,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscurePassword = !_obscurePassword;
-                                });
-                              },
-                            ),
-                            onFieldSubmitted: (_) {
-                              _onLogin(context);
-                            },
                           ),
 
                           SizedBox(height: 16.h),
