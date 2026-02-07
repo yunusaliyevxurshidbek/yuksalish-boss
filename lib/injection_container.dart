@@ -19,8 +19,10 @@ import 'features/auth/data/datasources/remote/login_remote_datasource.dart';
 import 'features/auth/data/datasources/remote/logout_remote_datasource.dart';
 import 'features/auth/data/datasources/remote/reset_password_remote_datasource.dart';
 import 'features/auth/data/datasources/remote/set_password_remote_datasource.dart';
+import 'features/auth/data/datasources/remote/register_remote_datasource.dart';
 import 'features/auth/data/datasources/remote/verify_otp_remote_datasource.dart';
 import 'features/app_lock/data/repositories/app_lock_repository_impl.dart';
+import 'features/auth/data/repositories/register_repository_impl.dart';
 import 'features/auth/data/repositories/forgot_password_repository_impl.dart';
 import 'features/auth/data/repositories/login_repository_impl.dart';
 import 'features/auth/data/repositories/logout_repository_impl.dart';
@@ -28,6 +30,7 @@ import 'features/auth/data/repositories/reset_password_repository_impl.dart';
 import 'features/auth/data/repositories/set_password_repository_impl.dart';
 import 'features/auth/data/repositories/verify_otp_repository_impl.dart';
 import 'features/app_lock/domain/repositories/app_lock_repository.dart';
+import 'features/auth/domain/repositories/register_repository.dart';
 import 'features/auth/domain/repositories/forgot_password_repository.dart';
 import 'features/auth/domain/repositories/login_repository.dart';
 import 'features/auth/domain/repositories/logout_repository.dart';
@@ -45,6 +48,7 @@ import 'features/app_lock/domain/usecases/verify_pin.dart';
 import 'features/auth/domain/usecases/login_user.dart';
 import 'features/auth/domain/usecases/logout_user.dart';
 import 'features/auth/domain/usecases/reset_password.dart';
+import 'features/auth/domain/usecases/send_register_code.dart';
 import 'features/auth/domain/usecases/send_forgot_password_code.dart';
 import 'features/auth/domain/usecases/set_password.dart';
 import 'features/auth/domain/usecases/verify_otp.dart';
@@ -54,6 +58,8 @@ import 'features/auth/presentation/bloc/login/login_cubit.dart';
 import 'features/auth/presentation/bloc/logout/logout_cubit.dart';
 import 'features/auth/presentation/bloc/otp/verify_otp_cubit.dart';
 import 'features/auth/presentation/bloc/reset_password/reset_password_cubit.dart';
+import 'features/auth/presentation/bloc/register/register_cubit.dart';
+import 'features/auth/presentation/bloc/registration_config/registration_config_cubit.dart';
 import 'features/auth/presentation/bloc/set_password/set_password_cubit.dart';
 
 // Dashboard Feature
@@ -210,6 +216,27 @@ Future<void> init() async {
       getIt<DeviceInfoService>(),
       getIt<RegisterDevice>(),
     ),
+  );
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // AUTH FEATURE - REGISTER
+  // ═══════════════════════════════════════════════════════════════════════════
+  getIt.registerLazySingleton<RegisterRemoteDataSource>(
+    () => RegisterRemoteDataSourceImpl(getIt<Dio>()),
+  );
+  getIt.registerLazySingleton<RegisterRepository>(
+    () => RegisterRepositoryImpl(
+      remoteDataSource: getIt<RegisterRemoteDataSource>(),
+    ),
+  );
+  getIt.registerLazySingleton<SendRegisterCode>(
+    () => SendRegisterCode(getIt<RegisterRepository>()),
+  );
+  getIt.registerFactory(
+    () => RegisterCubit(getIt<SendRegisterCode>()),
+  );
+  getIt.registerFactory(
+    () => RegistrationConfigCubit(getIt<Dio>()),
   );
 
   // ═══════════════════════════════════════════════════════════════════════════

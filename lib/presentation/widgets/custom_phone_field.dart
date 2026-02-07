@@ -19,7 +19,11 @@ class CustomPhoneField extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final fillColor = isDark ? theme.cardColor : AppColors.softGrey;
-    final borderColor = isDark ? AppColors.darkBorder : Colors.transparent;
+    final borderColor = isDark ? AppColors.darkBorder : AppColors.border;
+    final textColor =
+        isDark ? AppColors.darkTextPrimary : AppColors.textPrimary;
+    final hintColor =
+        isDark ? AppColors.darkTextSecondary : AppColors.textSecondary;
 
     return IntlPhoneField(
       controller: controller,
@@ -28,7 +32,7 @@ class CustomPhoneField extends StatelessWidget {
         hintStyle: GoogleFonts.urbanist(
           fontSize: 16.sp,
           fontWeight: FontWeight.w400,
-          color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.5),
+          color: hintColor,
         ),
         filled: true,
         fillColor: fillColor,
@@ -70,19 +74,19 @@ class CustomPhoneField extends StatelessWidget {
       style: GoogleFonts.urbanist(
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
-        color: theme.textTheme.titleMedium?.color,
+        color: textColor,
       ),
       dropdownTextStyle: GoogleFonts.urbanist(
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
-        color: theme.textTheme.titleMedium?.color,
+        color: textColor,
       ),
       flagsButtonPadding: EdgeInsets.only(left: 12.w),
       showCountryFlag: true,
       showDropdownIcon: true,
       dropdownIcon: Icon(
         Icons.arrow_drop_down,
-        color: theme.textTheme.titleMedium?.color,
+        color: textColor,
         size: 24.sp,
       ),
       onChanged: onChanged,

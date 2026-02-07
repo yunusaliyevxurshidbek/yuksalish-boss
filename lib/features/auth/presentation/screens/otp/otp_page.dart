@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:yuksalish_mobile/core/enums/otp_flow.dart';
+import 'package:yuksalish_mobile/core/services/my_shared_preferences.dart';
 import 'package:yuksalish_mobile/injection_container.dart';
 import 'package:yuksalish_mobile/features/app_lock/presentation/bloc/app_lock/app_lock_bloc.dart';
 import 'package:yuksalish_mobile/features/app_lock/presentation/bloc/app_lock/app_lock_event.dart';
@@ -15,6 +16,8 @@ import 'package:yuksalish_mobile/features/auth/presentation/bloc/forgot_password
 import 'package:yuksalish_mobile/features/auth/presentation/bloc/forgot_password/forgot_password_state.dart';
 import 'package:yuksalish_mobile/features/auth/presentation/bloc/otp/verify_otp_cubit.dart';
 import 'package:yuksalish_mobile/features/auth/presentation/bloc/otp/verify_otp_state.dart';
+import 'package:yuksalish_mobile/features/auth/presentation/bloc/register/register_cubit.dart';
+import 'package:yuksalish_mobile/features/auth/presentation/bloc/register/register_state.dart';
 import 'package:yuksalish_mobile/presentation/widgets/custom_number_pad.dart';
 import 'package:yuksalish_mobile/presentation/widgets/custom_snacbar.dart';
 
@@ -79,7 +82,11 @@ class _OtpPageState extends State<OtpPage> {
     if (!_canResend) return;
 
     final phone = widget.phoneNumber.replaceAll(RegExp(r'\s+'), '');
-    _resendForgotPasswordOtp(phone);
+    if (widget.flow == OtpFlow.register) {
+      _resendRegisterOtp(phone);
+    } else {
+      _resendForgotPasswordOtp(phone);
+    }
   }
 
   void _resendForgotPasswordOtp(String phone) {
@@ -106,6 +113,41 @@ class _OtpPageState extends State<OtpPage> {
             }
             WidgetsBinding.instance.addPostFrameCallback((_) {
               ctx.read<ForgotPasswordCubit>().sendCode(phone: phone);
+            });
+            return const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+  }
+
+  void _resendRegisterOtp(String phone) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => BlocProvider(
+        create: (_) => getIt<RegisterCubit>(),
+        child: BlocConsumer<RegisterCubit, RegisterState>(
+          listener: (ctx, state) {
+            if (state is RegisterSuccess) {
+              dialogContext.pop();
+              _pinController.clear();
+              _startTimer();
+              CustomSnacbar.show(context, text: state.message);
+            } else if (state is RegisterError) {
+              dialogContext.pop();
+              CustomSnacbar.show(context, text: state.message, isError: true);
+            } else if (state is RegisterPhoneExists) {
+              dialogContext.pop();
+              CustomSnacbar.show(context, text: state.message, isError: true);
+            }
+          },
+          builder: (ctx, state) {
+            if (state is RegisterLoading) {
+              return const OtpLoadingDialog();
+            }
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ctx.read<RegisterCubit>().submit(phone: phone);
             });
             return const SizedBox.shrink();
           },
@@ -152,6 +194,9 @@ class _OtpPageState extends State<OtpPage> {
       child: BlocConsumer<VerifyOtpCubit, VerifyOtpState>(
         listener: (context, state) {
           if (state is VerifyOtpSuccess) {
+            if (widget.flow == OtpFlow.register) {
+              MySharedPreferences.setRegistrationPending(true);
+            }
             CustomSnacbar.show(context, text: state.message);
             if (context.mounted) {
               if (widget.flow == OtpFlow.resetPin) {

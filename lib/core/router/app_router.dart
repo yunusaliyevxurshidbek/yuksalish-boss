@@ -9,6 +9,8 @@ import '../../features/approvals/presentation/screens/approvals_screen.dart';
 import '../../features/auth/presentation/screens/forgot_password/forgot_password.dart';
 import '../../features/auth/presentation/screens/login/login_page.dart';
 import '../../features/auth/presentation/screens/otp/otp_page.dart';
+import '../../features/auth/presentation/screens/register/register_page.dart';
+import '../../features/auth/presentation/screens/registration_pending/registration_pending_page.dart';
 import '../../features/auth/presentation/screens/pin_code/pin_code.dart';
 import '../../features/auth/presentation/screens/reset_password/reset_password.dart';
 import '../../features/auth/presentation/screens/set_up_user_info/set_up_user_info.dart';
@@ -58,6 +60,16 @@ final router = GoRouter(
       name: 'login_page',
       path: '/login_page',
       builder: (context, state) => const LoginPage(),
+    ),
+    GoRoute(
+      name: 'register',
+      path: '/register',
+      builder: (context, state) => const RegisterPage(),
+    ),
+    GoRoute(
+      name: 'registration_pending',
+      path: '/registration_pending',
+      builder: (context, state) => const RegistrationPendingPage(),
     ),
     GoRoute(
       name: 'otp_page',

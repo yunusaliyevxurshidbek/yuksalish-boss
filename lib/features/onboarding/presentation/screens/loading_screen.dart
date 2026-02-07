@@ -77,7 +77,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
     }
 
     if (appLockState.isPinConfigured) {
-      context.go('/dashboard');
+      final destination = MySharedPreferences.isRegistrationPending()
+          ? '/registration_pending'
+          : '/dashboard';
+      context.go(destination);
     } else {
       context.go('/pin_code');
     }

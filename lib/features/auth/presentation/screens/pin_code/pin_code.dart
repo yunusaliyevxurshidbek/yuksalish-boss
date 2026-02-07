@@ -117,9 +117,16 @@ class _PinCodePageState extends State<PinCodePage> {
     );
   }
 
+  void _goToHome() {
+    final destination = MySharedPreferences.isRegistrationPending()
+        ? '/registration_pending'
+        : '/dashboard';
+    context.go(destination);
+  }
+
   Future<void> _showBiometricEnableDialog(AppLockState state) async {
     if (_biometricDialogShown || !state.isBiometricAvailable) {
-      if (mounted) context.go('/dashboard');
+      if (mounted) _goToHome();
       return;
     }
 
@@ -130,7 +137,7 @@ class _PinCodePageState extends State<PinCodePage> {
       context.read<AppLockBloc>().add(const AppLockToggleBiometric(true));
     }
 
-    if (mounted) context.go('/dashboard');
+    if (mounted) _goToHome();
   }
 
   @override
@@ -148,7 +155,7 @@ class _PinCodePageState extends State<PinCodePage> {
           } else if (state.isBiometricAvailable && !state.isBiometricEnabled) {
             _showBiometricEnableDialog(state);
           } else {
-            context.go('/dashboard');
+            _goToHome();
           }
         }
       },

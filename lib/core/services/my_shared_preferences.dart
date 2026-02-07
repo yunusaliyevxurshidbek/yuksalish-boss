@@ -70,6 +70,7 @@ class MySharedPreferences {
     await _preferences.remove(_name);
     await _preferences.remove(_phone);
     await _preferences.remove(_companyId);
+    await _preferences.remove(_registrationPending);
     // Note: _firstLaunchCompleted is intentionally NOT cleared
   }
 
@@ -82,6 +83,7 @@ class MySharedPreferences {
   static const String _companyId = 'company_id';
   static const String _deviceId = 'device_id';
   static const String _firstLaunchCompleted = "first_launch_completed";
+  static const String _registrationPending = 'registration_pending';
   static const String _recentSearches = "recent_searches";
   static const int _maxRecentSearches = 10;
 
@@ -167,6 +169,15 @@ class MySharedPreferences {
 
   static bool isFirstLaunchCompleted() {
     return getBool(_firstLaunchCompleted) ?? false;
+  }
+
+  // registration_pending:
+  static Future<void> setRegistrationPending(bool pending) async {
+    await setBool(_registrationPending, pending);
+  }
+
+  static bool isRegistrationPending() {
+    return getBool(_registrationPending) ?? false;
   }
 
   // Recent Searches

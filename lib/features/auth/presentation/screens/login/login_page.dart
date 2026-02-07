@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show TextInput;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,8 @@ import 'package:yuksalish_mobile/core/theme/app_theme.dart';
 import 'package:yuksalish_mobile/injection_container.dart';
 import 'package:yuksalish_mobile/features/auth/presentation/bloc/login/login_cubit.dart';
 import 'package:yuksalish_mobile/features/auth/presentation/bloc/login/login_state.dart';
+import 'package:yuksalish_mobile/features/auth/presentation/bloc/registration_config/registration_config_cubit.dart';
+import 'package:yuksalish_mobile/features/auth/presentation/bloc/registration_config/registration_config_state.dart';
 import 'package:yuksalish_mobile/presentation/widgets/custom_button_universal.dart';
 import 'package:yuksalish_mobile/presentation/widgets/custom_snacbar.dart';
 import 'package:yuksalish_mobile/presentation/widgets/custom_text_field.dart';
@@ -64,8 +67,13 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<LoginCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<LoginCubit>()),
+        BlocProvider(
+          create: (_) => getIt<RegistrationConfigCubit>()..fetch(),
+        ),
+      ],
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
@@ -225,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   // login_button:
                   Padding(
-                    padding: EdgeInsets.fromLTRB(24.w, 0, 24.w, 24.h),
+                    padding: EdgeInsets.fromLTRB(24.w, 0, 24.w, 0),
                     child: PressableButton(
                       text: 'auth_login_button'.tr(),
                       onTap: () => _onLogin(context),
@@ -240,6 +248,45 @@ class _LoginPageState extends State<LoginPage> {
                       isDisabled: isLoading,
                     ),
                   ),
+
+                  SizedBox(height: 16.h),
+
+                  // register_link:
+                  BlocBuilder<RegistrationConfigCubit,
+                      RegistrationConfigState>(
+                    builder: (context, configState) {
+                      if (configState is RegistrationConfigLoaded &&
+                          configState.isOpen) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 24.h),
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'auth_login_no_account'.tr(),
+                              style: GoogleFonts.urbanist(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: theme.textTheme.bodySmall?.color,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'auth_login_register_link'.tr(),
+                                  style: GoogleFonts.urbanist(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap =
+                                        () => context.push('/register'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                      return SizedBox(height: 24.h);
+                    },
+                  ),
                 ],
               ),
             ),
@@ -253,7 +300,11 @@ class _LoginPageState extends State<LoginPage> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final fillColor = isDark ? theme.cardColor : AppColors.softGrey;
-    final borderColor = isDark ? AppColors.darkBorder : Colors.transparent;
+    final borderColor = isDark ? AppColors.darkBorder : AppColors.border;
+    final textColor =
+        isDark ? AppColors.darkTextPrimary : AppColors.textPrimary;
+    final hintColor =
+        isDark ? AppColors.darkTextSecondary : AppColors.textSecondary;
 
     return IntlPhoneField(
       controller: _phoneController,
@@ -262,7 +313,7 @@ class _LoginPageState extends State<LoginPage> {
         hintStyle: GoogleFonts.urbanist(
           fontSize: 16.sp,
           fontWeight: FontWeight.w400,
-          color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.5),
+          color: hintColor,
         ),
         filled: true,
         fillColor: fillColor,
@@ -304,19 +355,19 @@ class _LoginPageState extends State<LoginPage> {
       style: GoogleFonts.urbanist(
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
-        color: theme.textTheme.titleMedium?.color,
+        color: textColor,
       ),
       dropdownTextStyle: GoogleFonts.urbanist(
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
-        color: theme.textTheme.titleMedium?.color,
+        color: textColor,
       ),
       flagsButtonPadding: EdgeInsets.only(left: 12.w),
       showCountryFlag: true,
       showDropdownIcon: true,
       dropdownIcon: Icon(
         Icons.arrow_drop_down,
-        color: theme.textTheme.titleMedium?.color,
+        color: textColor,
         size: 24.sp,
       ),
       onChanged: (phone) {
